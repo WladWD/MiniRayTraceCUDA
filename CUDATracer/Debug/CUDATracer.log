@@ -1,0 +1,33 @@
+﻿  Compiling CUDA source file Tracer.cu...
+  
+  D:\VS2015 Project\SDipl\CUDATracer>"D:\Program\CUDA Toolkit\bin\nvcc.exe" -gencode=arch=compute_20,code=\"sm_20,compute_20\" --use-local-env --cl-version 2015 -ccbin "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin"  -I"D:\Program\CUDA Toolkit\include" -I"D:\Program\CUDA Toolkit\include"  -G   --keep-dir Debug -maxrregcount=0  --machine 32 --compile -cudart static  -g   -DWIN32 -D_DEBUG -D_WINDOWS -D_UNICODE -DUNICODE -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -o Debug\Tracer.cu.obj "D:\VS2015 Project\SDipl\CUDATracer\Tracer.cu" 
+CUDACOMPILE : nvcc warning : The 'compute_20', 'sm_20', and 'sm_21' architectures are deprecated, and may be removed in a future release (Use -Wno-deprecated-gpu-targets to suppress warning).
+  Tracer.cu
+D:/VS2015 Project/SDipl/CUDATracer/Tracer.cu(30): warning C4297: TracerCUDA::Tracer::~Tracer: ожидается, что функция не будет выдавать исключения, но она это делает
+  D:/VS2015 Project/SDipl/CUDATracer/Tracer.cu(30): note: деструктор или метод отмены выделения имеет (возможно, неявно) спецификацию, не предусматривающую создание исключений
+kernel32.lib(KERNEL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+kernel32.lib(KERNEL32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+user32.lib(USER32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+user32.lib(USER32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+gdi32.lib(GDI32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+gdi32.lib(GDI32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+winspool.lib(WINSPOOL.DRV) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+winspool.lib(WINSPOOL.DRV) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+comdlg32.lib(COMDLG32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+comdlg32.lib(COMDLG32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+advapi32.lib(ADVAPI32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+advapi32.lib(ADVAPI32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+shell32.lib(SHELL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+shell32.lib(SHELL32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+ole32.lib(ole32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+ole32.lib(ole32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+oleaut32.lib(OLEAUT32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+oleaut32.lib(OLEAUT32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+uuid.lib(iid.obj) : warning LNK4006: _IID_IEventDispatcher єцх юяЁхфхыхэ т uuid.lib(seo_i.obj); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+odbc32.lib(ODBC32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+odbc32.lib(ODBC32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+opengl32.lib(OPENGL32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+opengl32.lib(OPENGL32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+glew32.lib(glew32.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR єцх юяЁхфхыхэ т cudart.lib(cudart32_80.dll); тЄюЁюх юяЁхфхыхэшх яЁюяє∙хэю
+glew32.lib(glew32.dll) : warning LNK4221: ▌ЄюЄ Їрщы юс·хъЄр эх юяЁхфхы хЄ ъръшх-ышсю Ёрэхх эхюяЁхфхыхээ√х юЄъЁ√Є√х ёшьтюы√, яю¤Єюьє юэ эх сєфхЄ шёяюы№чютрЄ№ё  эшъръшьш юяхЁрЎш ьш ъюьяюэютъш, юсЁр∙р■∙шьшё  ъ ¤Єющ сшсышюЄхъх
+  CUDATracer.vcxproj -> D:\VS2015 Project\SDipl\Debug\CUDATracer.lib
