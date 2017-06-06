@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{18257A18-19D7-497B-BD8C-D354BA1B6B11}</ProjectGuid>
+    <ProjectGuid>{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>SDipl</RootNamespace>
+    <RootNamespace>CUDATracer</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)CUDATracer;$(CUDA_INC_PATH);G:\Program Files\OpenGL SDK\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(CudaToolkitLibDir);$(SolutionDir)$(IntDir);G:\Program Files\OpenGL SDK\lib\Win32;$(LibraryPath)</LibraryPath>
+    <IncludePath>G:\Program Files\OpenGL SDK\include;$(CUDA_INC_PATH);$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(CudaToolkitLibDir);G:\Program Files\OpenGL SDK\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -95,8 +95,10 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cudart.lib;cudadevrt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glew32.lib;winmm.lib;CUDATracer.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>cudart.lib;cudadevrt.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;opengl32.lib;glew32.lib</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -146,22 +148,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="DrawTrace.h" />
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="MainHeder.h" />
-    <ClInclude Include="TimerBase.h" />
-    <ClInclude Include="TimerSteady.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="TraceInfo.cuh" />
+    <ClInclude Include="Tracer.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="DrawTrace.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="TimerBase.cpp" />
-    <ClCompile Include="TimerSteady.cpp" />
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="WinMain.cpp" />
+    <CudaCompile Include="Tracer.cu">
+      <FileType>CppCode</FileType>
+    </CudaCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
