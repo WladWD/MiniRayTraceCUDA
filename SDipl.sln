@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SDipl", "SDipl\SDipl.vcxproj", "{18257A18-19D7-497B-BD8C-D354BA1B6B11}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220} = {F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CUDATracer", "CUDATracer\CUDATracer.vcxproj", "{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +26,14 @@ Global
 		{18257A18-19D7-497B-BD8C-D354BA1B6B11}.Release|x64.Build.0 = Release|x64
 		{18257A18-19D7-497B-BD8C-D354BA1B6B11}.Release|x86.ActiveCfg = Release|Win32
 		{18257A18-19D7-497B-BD8C-D354BA1B6B11}.Release|x86.Build.0 = Release|Win32
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Debug|x64.ActiveCfg = Debug|x64
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Debug|x64.Build.0 = Debug|x64
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Debug|x86.ActiveCfg = Debug|Win32
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Debug|x86.Build.0 = Debug|Win32
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Release|x64.ActiveCfg = Release|x64
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Release|x64.Build.0 = Release|x64
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Release|x86.ActiveCfg = Release|Win32
+		{F57E6CA3-C6CF-4DCD-95EA-A73CA180C220}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
