@@ -65,11 +65,16 @@ void DrawTrace::DrawTrace::Resize(int32_t mWidth, int32_t mHeight)
 void DrawTrace::DrawTrace::Draw(void)
 {
 	glm::vec3 mPosition = mCamera->GetPosition();
-	glm::mat4 mWorld = glm::inverse(mCamera->GetProjViewMatrix());
-
+	glm::mat4 mWorld = glm::transpose(glm::inverse(mCamera->GetProjViewMatrix()));
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	float mMatrix[16];
+	memcpy(mMatrix + 0,		glm::value_ptr(mWorld[0]), sizeof(glm::vec4));
+	memcpy(mMatrix + 4,		glm::value_ptr(mWorld[1]), sizeof(glm::vec4));
+	memcpy(mMatrix + 8,		glm::value_ptr(mWorld[2]), sizeof(glm::vec4));
+	memcpy(mMatrix + 12,	glm::value_ptr(mWorld[3]), sizeof(glm::vec4));
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	mTrace->MapResource();
-	mTrace->Trace();
+	mTrace->Trace(glm::value_ptr(mPosition), mMatrix);
 	mTrace->UnmapResource();
 	glBindTexture(GL_TEXTURE_2D, mTexture);
 	glBindBuffer(GL_PIXEL_UNPACK_BUFFER, mTextureBuffer);

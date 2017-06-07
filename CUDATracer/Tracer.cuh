@@ -19,7 +19,7 @@ namespace TracerCUDA
 		MyLibrary void MapResource(void);
 		MyLibrary void UnmapResource(void);
 
-		MyLibrary void Trace(void);
+		MyLibrary void Trace(float *mPosition, float *mMatrix);
 	};
 }
 
