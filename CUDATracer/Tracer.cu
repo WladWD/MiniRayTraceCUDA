@@ -1,5 +1,10 @@
 #include "Tracer.cuh"
 
+#define EPS 1e-3
+#define BACKGROUND make_float4(0.0f, 0.0f, 0.0f, 1.0f)
+
+#define BASE_SPHERE make_float3(0.0f, 0.0f, -8.0f)
+#define BASE_SPHERE_RADIUS 2.0f
 
 __constant__ float4 mWorldPosition[1];
 __constant__ float4 mWorldMatrix[4];
@@ -12,12 +17,39 @@ __device__ float VectorDot(float4 A, float4 B)
 		A.w * B.w;
 }
 
+__device__ float VectorDot(float3 A, float3 B)
+{
+	return A.x * B.x +
+		A.y * B.y +
+		A.z * B.z;
+}
+
 __device__ float4 VectorSub(float4 A, float4 B) 
 {
 	return make_float4(A.x - B.x,
 		A.y - B.y,
 		A.z - B.z,
 		A.w - B.w);
+}
+
+__device__ float3 VectorSub(float3 A, float3 B)
+{
+	return make_float3(
+		A.x - B.x,
+		A.y - B.y,
+		A.z - B.z
+		);
+}
+
+__device__ float3 NormalizeVector(float3 A) 
+{
+	float d = A.x * A.x + A.y * A.y + A.z * A.z;
+	d = sqrt(d);
+	return make_float3(
+		A.x / d,
+		A.y / d,
+		A.z / d
+	);
 }
 
 __device__ float4 BuildDirection(float4 mSource) 
@@ -36,6 +68,71 @@ __device__ float4 BuildDirection(float4 mSource)
 	return mDestDirection;
 }
 
+__device__ float SolveQU(float a, float b, float c) 
+{
+	float tx = -c / b;
+	if (a == 0.0f)
+		return tx >= 1.0f ? tx : 0.0f;
+
+	float D = b * b - 4.0f * a * c;
+
+	if (D < 0.0f)
+		return 0.0f;
+
+	float DSQ = sqrt(D);
+	float x1 = (-b + DSQ) / (2.0f * a);
+	float x2 = (-b - DSQ) / (2.0f * a);
+	
+	x1 = x1 >= 1.0f ? x1 : 0.0f;
+	x2 = x2 >= 1.0f ? x2 : 0.0f;
+	return min(x1, x2);
+}
+
+__device__ float3 MakePointFromLine(float4 mRayStart, float4 mRayDir, float mT) 
+{
+	return make_float3(
+		mRayStart.x + mRayDir.x * mT,
+		mRayStart.y + mRayDir.y * mT,
+		mRayStart.z + mRayDir.z * mT
+	);
+}
+
+__device__ float4 IntersectRaySphere(float4 mRayStart, float4 mRayDir)
+{
+
+	float3 mSphere = BASE_SPHERE;
+	float3 mSub = make_float3(
+		mRayStart.x - mSphere.x,
+		mRayStart.y - mSphere.y,
+		mRayStart.z - mSphere.z
+	);
+
+	float a, b, c;
+	a = VectorDot(mRayDir, mRayDir);//mRayDir.x * mRayDir.x + mRayDir.y *mRayDir.y + mRayDir.z * mRayDir.z;
+	b = 2.0f * VectorDot(
+		make_float3(mRayDir.x, mRayDir.y, mRayDir.z),
+		mSub);//mRayDir.x * mSub.x + 
+	c = VectorDot(mSub, mSub) - BASE_SPHERE_RADIUS * BASE_SPHERE_RADIUS;
+
+	float mT = SolveQU(a, b, c);
+	if(mT < 1.0f)
+		return BACKGROUND;
+
+	float3 mSphereIntrsectPoint = MakePointFromLine(mRayStart, mRayDir, mT);
+	float3 mSpherePointNormal = VectorSub(mSphereIntrsectPoint, BASE_SPHERE);
+	mSpherePointNormal = NormalizeVector(mSpherePointNormal);
+
+	//mSpherePointNormal.x = mSpherePointNormal.x * 0.5f + 0.5f;
+	//mSpherePointNormal.y = mSpherePointNormal.y * 0.5f + 0.5f;
+	//mSpherePointNormal.z = mSpherePointNormal.z * 0.5f + 0.5f;
+
+	return make_float4(
+		mSpherePointNormal.x,
+		mSpherePointNormal.y,
+		mSpherePointNormal.z,
+		1.0f);
+}
+
 __global__ void RayTrace(float4 *mTextureBuffer, int32_t mDimensionX, int32_t mDimensionY)
 {
 	int gDispatchX = blockIdx.x * blockDim.x + threadIdx.x;
@@ -51,12 +148,12 @@ __global__ void RayTrace(float4 *mTextureBuffer, int32_t mDimensionX, int32_t mD
 		float4 mRayStart = mWorldPosition[0];
 		mRayDir = VectorSub(mRayDir, mRayStart);
 
-		float ln = sqrt(mRayDir.x * mRayDir.x + mRayDir.y * mRayDir.y + mRayDir.z * mRayDir.z);
+		//float ln = sqrt(mRayDir.x * mRayDir.x + mRayDir.y * mRayDir.y + mRayDir.z * mRayDir.z);
 
-		float mValue = pow(VectorDot(mRayDir, make_float4(0.0f, 0.0f, -1.0f, 0.0f)) / ln, 8.0f);
+		//float mValue = pow(VectorDot(mRayDir, make_float4(0.0f, 0.0f, -1.0f, 0.0f)) / ln, 8.0f);
 
-		mTextureBuffer[mDispatchY * mDimensionX + gDispatchX] =
-			make_float4(mValue, mValue, mValue, 1.0f);
+		mTextureBuffer[mDispatchY * mDimensionX + gDispatchX] = IntersectRaySphere(mRayStart, mRayDir);
+			//make_float4(mValue, mValue, mValue, 1.0f);
 			//(float)gDispatchX / mDimensionX, (float)mDispatchY / mDimensionY, 1.0f, 1.0f);
 	}
 }
