@@ -3,11 +3,22 @@
 #define EPS 1e-3
 #define BACKGROUND make_float4(0.0f, 0.0f, 0.0f, 1.0f)
 
+#define LIGHT_POSITION make_float3(0.0f, 20.0f, -8.0f)
+#define LIGHT_COLOR make_float4(1.0f, 0.9985f, 1.0f, 1.0f)
+
 #define BASE_SPHERE make_float3(0.0f, 0.0f, -8.0f)
 #define BASE_SPHERE_RADIUS 2.0f
+#define SPHERE_DIFFUSE_COLOR make_float4(0.1f, 0.5f, 1.0f, 1.0f)
+#define SPHERE_SPECULAR_COLOR make_float4(0.9f, 0.9f, 1.0f, 1.0f)
+#define SPHERE_SPECULAR_POW 200.0f
 
 __constant__ float4 mWorldPosition[1];
 __constant__ float4 mWorldMatrix[4];
+
+#define USED_LIGHT 1
+#define MAX_LIGHT_COUNT 5
+__constant__ float3 mWorldLightPosition[MAX_LIGHT_COUNT];
+__constant__ float4 mWorldLightColor[MAX_LIGHT_COUNT];
 
 __device__ float VectorDot(float4 A, float4 B) 
 {
@@ -22,6 +33,24 @@ __device__ float VectorDot(float3 A, float3 B)
 	return A.x * B.x +
 		A.y * B.y +
 		A.z * B.z;
+}
+
+__device__ float4 VectorAdd(float4 A, float4 B)
+{
+	return make_float4(
+		A.x + B.x,
+		A.y + B.y,
+		A.z + B.z,
+		A.w + B.w);
+}
+
+__device__ float3 VectorAdd(float3 A, float3 B)
+{
+	return make_float3(
+		A.x + B.x,
+		A.y + B.y,
+		A.z + B.z
+	);
 }
 
 __device__ float4 VectorSub(float4 A, float4 B) 
@@ -39,6 +68,33 @@ __device__ float3 VectorSub(float3 A, float3 B)
 		A.y - B.y,
 		A.z - B.z
 		);
+}
+
+__device__ float4 VectorMul(float4 A, float4 B)
+{
+	return make_float4(
+		A.x * B.x,
+		A.y * B.y,
+		A.z * B.z,
+		A.w * B.w);
+}
+
+__device__ float4 VectorMul(float4 A, float B)
+{
+	return make_float4(
+		A.x * B,
+		A.y * B,
+		A.z * B,
+		A.w * B);
+}
+
+__device__ float3 VectorMul(float3 A, float3 B)
+{
+	return make_float3(
+		A.x * B.x,
+		A.y * B.y,
+		A.z * B.z
+	);
 }
 
 __device__ float3 NormalizeVector(float3 A) 
@@ -97,6 +153,31 @@ __device__ float3 MakePointFromLine(float4 mRayStart, float4 mRayDir, float mT)
 	);
 }
 
+__device__ float4 Lighting(float3 mPosition, float3 mNormal, int32_t mLightIndex) 
+{
+	float3 mLightPosition = mWorldLightPosition[mLightIndex];//LIGHT_POSITION;
+	float4 mLightColor = mWorldLightColor[mLightIndex];// LIGHT_COLOR;
+
+	float3 mLightRay = NormalizeVector(VectorSub(mLightPosition, mPosition));
+	float3 mViewRay = NormalizeVector(
+		VectorSub(
+			make_float3(mWorldPosition[0].x, mWorldPosition[0].y, mWorldPosition[0].z), 
+			mPosition)
+	);
+	float3 mH = NormalizeVector(VectorAdd(mLightRay, mViewRay));//mLightRay + mViewRay
+
+	float mLight = max(0.0f, VectorDot(mLightRay, mNormal));
+	float mSpecLight = pow(max(0.0f, VectorDot(mH, mNormal)), SPHERE_SPECULAR_POW);
+
+	float4 mDiffuse = VectorMul(mLightColor, SPHERE_DIFFUSE_COLOR);
+	mDiffuse = VectorMul(mDiffuse, mLight);//Add attantion
+
+	float4 mSpecular = VectorMul(mLightColor, SPHERE_SPECULAR_COLOR);
+	mSpecular = VectorMul(mSpecular, mSpecLight);//Add attantion
+
+	return VectorAdd(mDiffuse, mSpecular);
+}
+
 __device__ float4 IntersectRaySphere(float4 mRayStart, float4 mRayDir)
 {
 
@@ -125,12 +206,15 @@ __device__ float4 IntersectRaySphere(float4 mRayStart, float4 mRayDir)
 	//mSpherePointNormal.x = mSpherePointNormal.x * 0.5f + 0.5f;
 	//mSpherePointNormal.y = mSpherePointNormal.y * 0.5f + 0.5f;
 	//mSpherePointNormal.z = mSpherePointNormal.z * 0.5f + 0.5f;
-
-	return make_float4(
+	float4 mColor = BACKGROUND;
+	for (int32_t i = 0; i < USED_LIGHT; ++i)
+		mColor = VectorAdd(mColor, Lighting(mSphereIntrsectPoint, mSpherePointNormal, i));
+	return mColor;
+		/*make_float4(
 		mSpherePointNormal.x,
 		mSpherePointNormal.y,
 		mSpherePointNormal.z,
-		1.0f);
+		1.0f);*/
 }
 
 __global__ void RayTrace(float4 *mTextureBuffer, int32_t mDimensionX, int32_t mDimensionY)
@@ -206,6 +290,25 @@ void TracerCUDA::Tracer::Trace(float *mPosition, float *mMatrix)
 
 	cudaMemcpyToSymbol(mWorldPosition, mPos, sizeof(float4));
 	cudaMemcpyToSymbol(mWorldMatrix, mMatrix, 4 * sizeof(float4));
+
+	float3 mTMPWorldLightPosition[MAX_LIGHT_COUNT] = {
+		make_float3(1.0f, 2.0f, -4.0f),
+		make_float3(0.0f, 20.0f, -8.0f),
+		make_float3(0.0f, -20.0f, -8.0f),
+		make_float3(20.0f, 0.0f, -8.0f),
+		make_float3(-20.0f, 0.0f, -8.0f)		
+	};
+	float4 mTMPWorldLightColor[MAX_LIGHT_COUNT] =
+	{
+		make_float4(1.0f, 0.925f,	1.0f, 1.0f),
+		make_float4(1.0f, 0.0f,		0.4f, 1.0f),
+		make_float4(0.5f, 0.725f,	1.0f, 1.0f),
+		make_float4(0.8f, 0.125f,	0.2f, 1.0f),
+		make_float4(0.8f, 0.125f,	0.2f, 1.0f)
+	};
+
+	cudaMemcpyToSymbol(mWorldLightPosition, mTMPWorldLightPosition, MAX_LIGHT_COUNT * sizeof(float3));
+	cudaMemcpyToSymbol(mWorldLightColor, mTMPWorldLightColor, MAX_LIGHT_COUNT * sizeof(float4));
 
 	dim3 threads(32, 32);
 	dim3 blocks((mInfo.mDimX + 31) / 32, (mInfo.mDimY + 31) / 32);
